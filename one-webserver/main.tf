@@ -27,7 +27,7 @@ resource "aws_instance" "example" {
   user_data = <<-EOF
 		  #!/bin/bash
 		  echo "Hello, World" > index.html
-		  nohup busybox httpd -f -p 8080 &
+		  nohup busybox httpd -f -p ${var.server_port} &
 		  EOF
   # tag 추가 
   tags = {
@@ -42,8 +42,8 @@ resource "aws_security_group" "instance" {
 
 # 인바운드 규칙 설정
   ingress {
-    from_port   = 8080 # 출발포트
-    to_port     = 8080 # 도착포트
+    from_port   = var.server.port # 출발포트
+    to_port     = var.server.port # 도착포트
     protocol    = "tcp" # 프로토콜
     cidr_blocks = ["0.0.0.0/0"]  # 송신지 
 
